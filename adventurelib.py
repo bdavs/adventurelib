@@ -1,3 +1,13 @@
+from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function, unicode_literals
+#from builtins import (bytes, str, open, super, range, zip, round, input, int, pow, object)
+from builtins import *
+from future.utils import python_2_unicode_compatible, raise_from, bind_method
+from io import open
+from future import standard_library
+standard_library.install_aliases()
+
+
+
 import re
 import sys
 import inspect
@@ -25,6 +35,14 @@ __all__ = (
     'set_context',
     'get_context',
 )
+
+PY3 = sys.version_info[0] == 3
+PY2 = sys.version_info[0] == 2
+if PY2:
+    import funcsigs
+#    print("python2")
+#elif PY3:
+#    print("python3")
 
 
 #: The current context.
@@ -129,7 +147,7 @@ class Placeholder:
         return self.name.upper()
 
 
-class Room:
+class Room(object):
     """A generic room object that can be used by game code."""
 
     _directions = {}
@@ -287,7 +305,10 @@ class Bag(set):
 def _register(command, func, context=None, kwargs={}):
     """Register func as a handler for the given command."""
     pattern = Pattern(command, context)
-    sig = inspect.signature(func)
+    if PY3:
+        sig = inspect.signature(func)
+    elif PY2:
+        sig = funcsigs.signature(func)
     func_argnames = set(sig.parameters)
     when_argnames = set(pattern.argnames) | set(kwargs.keys())
     if func_argnames != when_argnames:

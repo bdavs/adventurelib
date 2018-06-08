@@ -1,10 +1,13 @@
+from __future__ import nested_scopes,generators,division, absolute_import,with_statement, print_function,unicode_literals
+from builtins import bytes, chr
+from future.utils import python_2_unicode_compatible
+from io import open
+
 from adventurelib import *
 
 Room.items = Bag()
 
-current_room = starting_room = Room("""
-You are in a dark room.
-""")
+current_room = starting_room = Room("You are in a dark room.")
 
 valley = starting_room.north = Room("""
 You are in a beautiful valley.
@@ -72,9 +75,11 @@ def show_inventory():
         say(thing)
 
 @when('cast', context='magic_aura', magic=None)
+@when('cast MAGIC', context='magic_aura', magic=None)
 def cast(magic):
     if magic == None:
         say("Which magic you would like to spell?")
-
+    else:
+        say("You cast " + magic)
 look()
 start()
