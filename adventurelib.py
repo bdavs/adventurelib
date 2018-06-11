@@ -1,4 +1,4 @@
-from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function, unicode_literals
+from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function
 #from builtins import (bytes, str, open, super, range, zip, round, input, int, pow, object)
 from builtins import *
 from future.utils import python_2_unicode_compatible, raise_from, bind_method
@@ -9,7 +9,7 @@ standard_library.install_aliases()
 
 
 import re
-import sys
+import sys, os
 import inspect
 import readline  # noqa: adds readline semantics to input()
 import textwrap
@@ -36,6 +36,7 @@ __all__ = (
     'get_context',
 )
 
+#adding support for python2
 PY3 = sys.version_info[0] == 3
 PY2 = sys.version_info[0] == 2
 if PY2:
@@ -44,6 +45,17 @@ if PY2:
 #elif PY3:
 #    print("python3")
 
+#fileOut = None
+
+
+fileOutPath = "/tmp/OutFifo"
+#os.unlink(fileOutPath)
+if not os.path.exists(fileOutPath):
+    os.mkfifo(fileOutPath)
+#global fileOut
+fileOut = open(fileOutPath,"w")
+
+TESTING=False
 
 #: The current context.
 #:
@@ -473,6 +485,7 @@ def prompt():
 def no_command_matches(command):
     """Called when a command is not understood."""
     print("I don't understand '%s'." % command)
+    output("I don't understand '%s'." % command)
 
 
 def when(command, context=None, **kwargs):
@@ -487,6 +500,8 @@ def help():
     """Print a list of the commands you can give."""
     print('Here is a list of the commands you can give:')
     cmds = sorted(c.orig_pattern for c, _, _ in commands if c.is_active())
+    cmds_str = 'Currently Available Adventure Commands: ' + ", ".join(cmds)
+    output(cmds_str)
     for c in cmds:
         print(c)
 
@@ -509,7 +524,7 @@ def _available_commands():
     )
     return available_commands
 
-
+@python_2_unicode_compatible
 def _handle_command(cmd):
     """Handle a command typed by the user."""
     ws = cmd.lower().split()
@@ -523,11 +538,25 @@ def _handle_command(cmd):
             break
     else:
         no_command_matches(cmd)
-    print()
+    #print(python_2_unicode_compatible_redo(cmd))
 
+def python_2_unicode_compatible_redo(msg):
+    if PY2:
+        return unicode(msg)
+    else:
+        return msg
 
+@python_2_unicode_compatible
 def start(help=True):
     """Run the game."""
+
+
+    fileInPath = "/tmp/InFifo"
+    if not os.path.exists(fileInPath):
+        os.mkfifo(fileInPath)
+    fileIn = open(fileInPath,"r",encoding="UTF-8")
+    sys.stdin = fileIn
+
     if help:
         # Ugly, but we want to keep the arguments consistent
         help = globals()['help']
@@ -538,9 +567,10 @@ def start(help=True):
         commands.insert(0, (qmark, help, {}))
     while True:
         try:
-            cmd = input(prompt()).strip()
+            cmd = input(python_2_unicode_compatible_redo(prompt())).strip()
         except EOFError:
-            print()
+            print(python_2_unicode_compatible_redo("end of file"))
+            say("something broke")
             break
 
         if not cmd:
@@ -548,7 +578,7 @@ def start(help=True):
 
         _handle_command(cmd)
 
-
+@python_2_unicode_compatible
 def say(msg):
     """Print a message.
 
@@ -564,8 +594,18 @@ def say(msg):
     width = get_terminal_size()[0]
     paragraphs = re.split(r'\n(?:[ \t]*\n)', msg)
     formatted = (textwrap.fill(p.strip(), width=width) for p in paragraphs)
-    print('\n\n'.join(formatted))
 
+    output(python_2_unicode_compatible_redo('\n\n'.join(formatted)))
+    #sys.stdout.flush()
+
+def output(msg):
+    if TESTING:
+        print(msg)
+    else:
+        print(msg)
+        fileOut.write(msg)
+        fileOut.flush()
+#        fileOut.flush()
 
 commands = [
     (Pattern('quit'), sys.exit, {}),  # quit command is built-in
