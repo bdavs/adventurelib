@@ -10,6 +10,7 @@ standard_library.install_aliases()
 
 import re
 import sys, os
+import signal
 import inspect
 import readline  # noqa: adds readline semantics to input()
 import textwrap
@@ -41,21 +42,16 @@ PY3 = sys.version_info[0] == 3
 PY2 = sys.version_info[0] == 2
 if PY2:
     import funcsigs
-#    print("python2")
-#elif PY3:
-#    print("python3")
-
-#fileOut = None
 
 
-fileOutPath = "/tmp/OutFifo"
-#os.unlink(fileOutPath)
-if not os.path.exists(fileOutPath):
-    os.mkfifo(fileOutPath)
-#global fileOut
-fileOut = open(fileOutPath,"w")
+TESTING=True
+if not TESTING:
+    fileOutPath = "/tmp/OutFifo"
+    if not os.path.exists(fileOutPath):
+        os.mkfifo(fileOutPath)
+    fileOut = open(fileOutPath,"w")
 
-TESTING=False
+
 
 #: The current context.
 #:
@@ -550,12 +546,12 @@ def python_2_unicode_compatible_redo(msg):
 def start(help=True):
     """Run the game."""
 
-
-    fileInPath = "/tmp/InFifo"
-    if not os.path.exists(fileInPath):
-        os.mkfifo(fileInPath)
-    fileIn = open(fileInPath,"r",encoding="UTF-8")
-    sys.stdin = fileIn
+    if not TESTING:
+        fileInPath = "/tmp/InFifo"
+        if not os.path.exists(fileInPath):
+            os.mkfifo(fileInPath)
+        fileIn = open(fileInPath,"r",encoding="UTF-8")
+        sys.stdin = fileIn
 
     if help:
         # Ugly, but we want to keep the arguments consistent
@@ -565,6 +561,7 @@ def start(help=True):
         qmark.orig_pattern = '?'
         commands.insert(0, (Pattern('help'), help, {}))
         commands.insert(0, (qmark, help, {}))
+    #begin main while loop
     while True:
         try:
             cmd = input(python_2_unicode_compatible_redo(prompt())).strip()
@@ -605,7 +602,15 @@ def output(msg):
         print(msg)
         fileOut.write(msg)
         fileOut.flush()
-#        fileOut.flush()
+
+def sigint_handler(signum, frame):
+    print("exiting gracefully")
+    fileOut.flush()
+    fileOut.close()
+    sys.stdin = sys.__stdin__
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, sigint_handler)
 
 commands = [
     (Pattern('quit'), sys.exit, {}),  # quit command is built-in
