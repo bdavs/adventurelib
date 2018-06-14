@@ -26,6 +26,10 @@ You are in a cranky wizard chambers.
 """)
 
 
+tower = wizard_chamber.east = Room("""
+you are in a tower
+""")
+
 
 #items in locations
 mallet = Item('rusty mallet', 'mallet')
@@ -34,6 +38,7 @@ valley.items = Bag({mallet,spoon,})
 
 wand = Item('wand','wand')
 wizard_chamber.items = Bag({wand,})
+
 
 inventory = Bag()
 
@@ -69,6 +74,16 @@ def take(item):
         inventory.add(obj)
     else:
         say('There is no %s here.' % item)
+
+
+
+@when('use ITEM')
+def use(item):
+    current_item = inventory.find(item)
+    if not current_item:
+        say("you do not have that item")
+    elif current_item is wand:
+        say(current_room.exits())
 
 
 @when('drop THING')

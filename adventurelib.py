@@ -12,7 +12,9 @@ import re
 import sys, os
 import signal
 import inspect
-import readline  # noqa: adds readline semantics to input()
+
+#import readline  # noqa: adds readline semantics to input()
+
 import textwrap
 import random
 from copy import deepcopy
