@@ -25,7 +25,9 @@ wizard_chamber = magic_forest.north = Room("""
 You are in a cranky wizard chambers.
 """)
 
-
+tower = wizard_chamber.west = Room("""
+You are in a spacious tower.
+""")
 
 #items in locations
 mallet = Item('rusty mallet', 'mallet')
@@ -35,6 +37,8 @@ valley.items = Bag({mallet,spoon,})
 wand = Item('wand','wand')
 wizard_chamber.items = Bag({wand,})
 
+ball = Item('Crystal ball', 'ball')
+tower.items = Bag({ball,})
 inventory = Bag()
 
 #action functions
@@ -69,6 +73,19 @@ def take(item):
         inventory.add(obj)
     else:
         say('There is no %s here.' % item)
+
+@when('use ITEM')
+def use(item):
+   current_item = inventory.find(item)
+   if not current_item:
+       say("you do not have that item")
+   elif current_item is ball:
+      say(current_room.exits())
+
+
+
+
+
 
 
 @when('drop THING')
