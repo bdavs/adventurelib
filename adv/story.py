@@ -1,13 +1,12 @@
 from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function, unicode_literals
-#from io import open
-
 import pickle
-import os
+
 from adventurelib import *
 
 
 # locations
 Room.items = Bag()
+Room.gold = 0
 
 current_room = starting_room = Room("""
 You are in a dark room.
@@ -32,12 +31,18 @@ You are in a spacious tower.
 
 # items in locations
 Item.amount = 0
+#gold = Item('gold')
+#gold.amount = 5
 
 
-
-mallet = Item('rusty mallet', 'mallet')
+#mallet = Item('rusty mallet', 'mallet')
 spoon = Item('greasy spoon', 'spoon')
-valley.items = Bag({mallet,spoon,})
+valley.items = Bag({spoon,})
+valley.gold = 5
+
+
+magic_forest.gold = 6
+
 
 wand = Item('wand','wand')
 wizard_chamber.items = Bag({wand,})
@@ -52,7 +57,7 @@ tower.items = Bag({ball,Item(letter_bank[0])})
 
 
 inventory = Bag()
-
+inventory.gold = 0
 
 # action functions
 @when('north', direction='north')
@@ -85,6 +90,10 @@ def take(item):
     if obj:
         say('You pick up the %s.' % obj)
         inventory.add(obj)
+    elif item == 'gold':
+        inventory.gold += current_room.gold
+        say('You pick up the {} gold'.format(current_room.gold))
+        current_room.gold = 0
     else:
         say('There is no %s here.' % item)
 
@@ -96,7 +105,7 @@ def use(item):
    elif current_item is ball:
       say(current_room.exits())
 
-
+# add ability to drop gold
 @when('drop THING')
 def drop(thing):
     obj = inventory.take(thing)
@@ -106,7 +115,7 @@ def drop(thing):
         say('You drop the %s.' % obj)
         current_room.items.add(obj)
 
-
+@when('l')
 @when('look')
 def look():
     say(current_room)
@@ -116,8 +125,10 @@ def look():
                 say('There are {} {} here.'.format(i.amount,i))
             else:
                 say('A %s is here.' % i)
+    if current_room.gold > 0:
+        say("There is {} gold on the ground".format(current_room.gold))
 
-
+@when('i')
 @when('inv')
 @when('inventory')
 def show_inventory():
@@ -126,13 +137,15 @@ def show_inventory():
     for thing in inventory:
         if thing.amount > 0:
             say("{} {}".format(thing.amount,thing))
+            single = False
         else:
             if single:
                 say(thing)
                 single = False
             else:
                 say(", "+str(thing))
-
+    if inventory.gold > 0:
+        say("{} gold".format(inventory.gold))
 
 @when('cast', context='magic_aura', magic=None)
 @when('cast MAGIC', context='magic_aura', magic=None)
@@ -143,14 +156,15 @@ def cast(magic):
         say("You cast " + magic)
 
 
-@when('save')
+#save and load not currently working
+# @when('save')
 def save():
     data = {"current_room": current_room, "inventory": inventory}
     pickle.dump(data, open("save.p", "wb"))
     say("Game saved. ")
 
 
-@when('load')
+# @when('load')
 def load():
     data = pickle.load(open("save.p", "rb"))
     global current_room
@@ -162,12 +176,6 @@ def load():
     show_inventory()
 
 if __name__ == "__main__":
-    # print("two.py is being run directly")
     look()
     start()
-#else:
-#    print("two.py is being imported into another module")
-#    look()
-#    start()
-# if __name__ is "__main__":
 

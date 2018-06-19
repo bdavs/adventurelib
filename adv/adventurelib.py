@@ -1,23 +1,11 @@
 from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function
-TESTING = True
+TESTING = False
 if TESTING:
     from future.builtins import *
-
-#from builtins import str
-#import fdsnhajklfdhsajkl
 from future.utils import python_2_unicode_compatible
-#from io import open
-#from future import standard_library
-#standard_library.install_aliases()
-
 
 import sys
-
-
-
 import re
-#import sys
-import inspect
 import textwrap
 import random
 from copy import deepcopy
@@ -480,8 +468,8 @@ def help():
     cmds = sorted(c.orig_pattern for c, _, _ in commands if c.is_active())
     cmds_str = 'Currently Available Adventure Commands: ' + ", ".join(cmds)
     output(cmds_str)
-    for c in cmds:
-        print(c)
+    #for c in cmds:
+    #    print(c)
 
 
 def _available_commands():
@@ -536,8 +524,8 @@ def start(help=True):
     #begin main while loop
     while True:
         try:
-            cmd = input()
-            print(cmd + " test")
+            cmd = input(prompt())
+            #print(cmd + " test")
         except EOFError:
             print(python_2_unicode_compatible_redo("end of file"))
             say("something broke")
