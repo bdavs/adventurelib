@@ -1,7 +1,6 @@
 # adventurelib
 
-`adventurelib` provides basic functionality for writing text-based adventure
-games, with the aim of making it easy enough for young teenagers to do.
+`adventurelib` provides basic functionality for writing text-based adventure games
 
 The foundation of adventurelib is the ability to define functions that are
 called in response to commands. For example, you could write a function to
@@ -18,11 +17,9 @@ themselves as they explore Python programming concepts.
 
 ## Installing
 
-`adventurelib.py` is a single file that can be copied into your project. You
-can also install it with pip:
+This may be used from the python script itself (starting in story.py)
 
-    pip install adventurelib
-
+or it will work in Streamlabs Chatbot as a script
 
 ## Documentation
 
