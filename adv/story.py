@@ -1,13 +1,15 @@
-from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function, unicode_literals
-import pickle
+from __future__ import (nested_scopes, generators, division, absolute_import,
+with_statement, print_function, unicode_literals)
+# import pickle
 
-from adventurelib import *
+# from adventurelib import *
+from adventurelib import Room, Item, say, when, Bag, start, set_context, get_context
 
-
-# locations
+# initialize rooms
 Room.items = Bag()
 Room.gold = 0
 
+# locations
 current_room = starting_room = Room("""
 You are in a dark room.
 """)
@@ -28,37 +30,41 @@ tower = wizard_chamber.west = Room("""
 You are in a spacious tower.
 """)
 
-
-# items in locations
-Item.amount = 0
-#gold = Item('gold')
-#gold.amount = 5
-
-
-#mallet = Item('rusty mallet', 'mallet')
-spoon = Item('greasy spoon', 'spoon')
-valley.items = Bag({spoon,})
-valley.gold = 5
-
-
-magic_forest.gold = 6
-
-
-wand = Item('wand','wand')
-wizard_chamber.items = Bag({wand,})
-
+# letter_bank is an array of item letters. they will be added to the notebook
 letter_bank = []
 for letter in "Thanks for playing":
     letter_bank.append(Item(letter))
 
+# item creation
+Item.amount = 0
+
+spoon = Item('greasy spoon', 'spoon')
+
+wand = Item('wand')
+
+compass = Item('Compass')
+
 ball = Item('Crystal ball', 'ball')
-tower.items = Bag({ball,letter_bank[0]})
+
+# location properties and items
+valley.items = Bag({compass})
+valley.gold = 5
+
+magic_forest.gold = 6
+
+wizard_chamber.items = Bag({wand})
+
+tower.items = Bag({ball, letter_bank[0]})
 
 
+# make the notebook to store letters
 class Notebook(Item):
     letters_found = Bag()
+
+
 notebook = Notebook('Notebook', 'book', 'notes')
 
+# initialize the players inventory
 inventory = Bag()
 inventory.gold = 0
 inventory.add(notebook)
@@ -112,12 +118,18 @@ def take(item):
 
 @when('use ITEM')
 def use(item):
-   current_item = inventory.find(item)
-   if not current_item:
-       say("you do not have that item")
-   elif current_item is ball:
-      say(current_room.exits())
-
+    current_item = inventory.find(item)
+    if not current_item:
+        say("you do not have that item")
+    elif current_item is compass:
+        say(current_room.exits())
+    elif current_item is ball:
+        for dir in current_room.exits():
+            say(" You gaze into the crystal and picture yourself moving {}.:".format(dir))
+            say(current_room.exit(dir))
+    else:
+        say("Oak's words echoed... There's a time and place for everything, but not now.")
+      #say("There is currently no use for {} here".format(current_item))
 # add ability to drop gold
 @when('drop THING')
 def drop(thing):
@@ -158,7 +170,10 @@ def show_inventory():
             else:
                 say(", "+str(thing))
     if inventory.gold > 0:
+        if not single:
+            say(",")
         say("{} gold".format(inventory.gold))
+        single = False
     nb = inventory.find("Notebook")
     if nb and nb.letters_found:
         say("You have found the following letters: ")
