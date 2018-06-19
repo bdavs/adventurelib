@@ -49,15 +49,19 @@ wizard_chamber.items = Bag({wand,})
 
 letter_bank = []
 for letter in "Thanks for playing":
-    letter_bank.append(letter)
+    letter_bank.append(Item(letter))
 
 ball = Item('Crystal ball', 'ball')
-tower.items = Bag({ball,Item(letter_bank[0])})
+tower.items = Bag({ball,letter_bank[0]})
 
 
+class Notebook(Item):
+    letters_found = Bag()
+notebook = Notebook('Notebook', 'book', 'notes')
 
 inventory = Bag()
 inventory.gold = 0
+inventory.add(notebook)
 
 # action functions
 @when('north', direction='north')
@@ -89,7 +93,16 @@ def take(item):
     obj = current_room.items.take(item)
     if obj:
         say('You pick up the %s.' % obj)
-        inventory.add(obj)
+        if obj in letter_bank:
+    #        print("this is a letter")
+            nb = inventory.find("notebook")
+            if nb:
+                nb.letters_found.add(obj)
+            else:
+                say("But you do not have a way to record it, so you put it back down on the ground.")
+                current_room.items.add(obj)
+        else:
+            inventory.add(obj)
     elif item == 'gold':
         inventory.gold += current_room.gold
         say('You pick up the {} gold'.format(current_room.gold))
@@ -146,7 +159,11 @@ def show_inventory():
                 say(", "+str(thing))
     if inventory.gold > 0:
         say("{} gold".format(inventory.gold))
-
+    nb = inventory.find("Notebook")
+    if nb and nb.letters_found:
+        say("You have found the following letters: ")
+        for letter in nb.letters_found:
+            say(letter)
 @when('cast', context='magic_aura', magic=None)
 @when('cast MAGIC', context='magic_aura', magic=None)
 def cast(magic):

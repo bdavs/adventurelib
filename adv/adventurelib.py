@@ -1,5 +1,5 @@
 from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function
-TESTING = False
+TESTING = True
 if TESTING:
     from future.builtins import *
 from future.utils import python_2_unicode_compatible
@@ -535,19 +535,21 @@ def start(help=True):
             continue
 
         _handle_command(cmd)
+        print(get_output())
 
 def single_command(cmds):
-    try:
-        cmd = cmds #input(python_2_unicode_compatible_redo(prompt())).strip()
-    except EOFError:
-        print(python_2_unicode_compatible_redo("end of file"))
-        say("something broke")
+#    try:
+#        cmd = cmds #input(python_2_unicode_compatible_redo(prompt())).strip()
+#    except EOFError:
+#        print(python_2_unicode_compatible_redo("end of file"))
+#        say("something broke")
+#        return
+
+    if not cmds:
+        #look()
         return
 
-    if not cmd:
-        return
-
-    _handle_command(cmd)
+    _handle_command(cmds)
     return
 
 @python_2_unicode_compatible
@@ -561,19 +563,19 @@ def say(msg):
     separately.
 
     """
-    msg = str(msg)
-    msg = re.sub(r'^[ \t]*(.*?)[ \t]*$', r'\1', msg, flags=re.M)
-    width = get_terminal_size()[0]
-    paragraphs = re.split(r'\n(?:[ \t]*\n)', msg)
-    formatted = (textwrap.fill(p.strip(), width=width) for p in paragraphs)
+    msg = str(msg).replace('\n',' ')
+#    msg = re.sub(r'^[ \t]*(.*?)[ \t]*$', r'\1', msg, flags=re.M)
+#    width = get_terminal_size()[0]
+#    paragraphs = re.split(r'\n(?:[ \t]*\n)', msg)
+#    formatted = (textwrap.fill(p.strip(), width=width) for p in paragraphs)
 
-    output(python_2_unicode_compatible_redo('\n\n'.join(formatted)))
+    output(msg) #python_2_unicode_compatible_redo('\n\n'.join(formatted)))
     #sys.stdout.flush()
 OUTPUT_STR = ""
 def output(msg):
     global OUTPUT_STR
-    OUTPUT_STR += msg
-    print(msg)
+    OUTPUT_STR += msg + " "
+#n    print(msg)
 
 
 def get_output():
