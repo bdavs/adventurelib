@@ -9,35 +9,43 @@ from adventurelib import Room, Item, say, when, Bag, start, set_context, get_con
 Room.items = Bag()
 Room.gold = 0
 
-# locations
+#locations
 current_room = starting_room = Room("""
-You are in a dark room.
+you awaken in a dungeon cellar. in front of you lies a notebook which reads, 
+Take me with you to find the letters. only one phrase will set you free
 """)
 
-valley = starting_room.north = Room("""
-You are in a beautiful valley.
+Room_1 = starting_room.north = Room("""
+you proceed toward the next room. this room is dimly lit and smells of mold.
 """)
 
-magic_forest = valley.north = Room("""
-You are in a enchanted forest where magic grows wildly.
+Room_2 = Room_1.north = Room("""
+You press on through, coming to a room with a single candle and table.
 """)
 
-wizard_chamber = magic_forest.north = Room("""
+
+Room_R1 = Room("""
+you head right and enter the servants quarters
+""")
+
+Room_3 = Room_2.north =Room_R1.west = Room("""
 You are in a cranky wizard chambers.
 """)
 
-tower = wizard_chamber.west = Room("""
+
+Room_L1 = Room_3.west = Room("""
 You are in a spacious tower.
 """)
 
+
 # letter_bank is an array of item letters. they will be added to the notebook
 letter_bank = []
-for letter in "Thanks for playing":
+for letter in "THANKS FOR PLAYING":
     letter_bank.append(Item(letter))
 
 # item creation
 Item.amount = 0
-
+mallet = Item('rusty mallet', 'mallet')
 spoon = Item('greasy spoon', 'spoon')
 
 wand = Item('wand')
@@ -47,14 +55,14 @@ compass = Item('Compass')
 ball = Item('Crystal ball', 'ball')
 
 # location properties and items
-valley.items = Bag({compass})
-valley.gold = 5
+Room_1.items = Bag({compass})
+Room_1.gold = 5
 
-magic_forest.gold = 6
+Room_R1.gold = 6
 
-wizard_chamber.items = Bag({wand})
+#wizard_chamber.items = Bag({wand})
 
-tower.items = Bag({ball, letter_bank[0]})
+#tower.items = Bag({ball, letter_bank[0]})
 
 
 # make the notebook to store letters
@@ -190,22 +198,22 @@ def cast(magic):
 
 #save and load not currently working
 # @when('save')
-def save():
-    data = {"current_room": current_room, "inventory": inventory}
-    pickle.dump(data, open("save.p", "wb"))
-    say("Game saved. ")
+#def save():
+#    data = {"current_room": current_room, "inventory": inventory}
+#    #pickle.dump(data, open("save.p", "wb"))
+#    say("Game saved. ")
 
 
 # @when('load')
-def load():
-    data = pickle.load(open("save.p", "rb"))
-    global current_room
-    current_room = data["current_room"]
-    global inventory
-    inventory = data["inventory"]
-    say("Game loaded. ")
-    look()
-    show_inventory()
+#def load():
+#   # data = pickle.load(open("save.p", "rb"))
+##    global current_room
+#    current_room = data["current_room"]
+#    global inventory
+#    inventory = data["inventory"]
+#    say("Game loaded. ")
+#    look()
+#    show_inventory()
 
 if __name__ == "__main__":
     look()
