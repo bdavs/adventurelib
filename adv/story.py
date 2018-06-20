@@ -31,9 +31,11 @@ You press on through, coming to a room with a single candle and table.
 """)
 
 Room_List[3][3] = Room_List[3][2].north = Room("""
+You enter a lavish circular chamber.
 """)
 
 Room_List[3][4] = Room_List[3][3].north = Room("""
+
 """)
 
 Room_List[3][5] = Room_List[3][4].north = Room("""
@@ -66,7 +68,8 @@ Room_List[6][2] = Room_List[6][3].south = Room("""
 Room_List[6][1] = Room_List[6][2].south = Room("""
 """)
 
-Room_List[6][0] = Room_List[6][1].south = Room("""
+Room_List[6][0] = Room_List[6][1].south = Room(""" 
+door room
 """)
 
 Room_List[2][3] = Room_List[3][3].west = Room("""
@@ -291,6 +294,6 @@ def cast(magic):
 #    show_inventory()
 
 if __name__ == "__main__":
-    look()
+#    look()
     start()
 
