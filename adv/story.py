@@ -18,16 +18,16 @@ for x in range(0,Width):
 
 
 current_room = starting_room = Room_List[3][0] = Room("""
-you awaken in a dungeon cellar. in front of you lies a notebook which reads, 
+You awaken in a dungeon cellar. in front of you lies a notebook which reads, 
 Take me with you to find the letters. only one phrase will set you free
 """)
 
 Room_List[3][1] = Room_List[3][0].north = Room("""
-you proceed toward the next room. this room is dimly lit and smells of mold.
+You enter a dimly lit room which smells of elderberries.
 """)
 
 Room_List[3][2] = Room_List[3][1].north = Room("""
-You press on through, coming to a room with a single candle and table.
+You enter a brighter room with a desk at its center and one chair.
 """)
 
 Room_List[3][3] = Room_List[3][2].north = Room("""
@@ -35,84 +35,92 @@ You enter a lavish circular chamber.
 """)
 
 Room_List[3][4] = Room_List[3][3].north = Room("""
-
+You enter a room brimmed full of weapons and a sign that reads armory.
 """)
 
 Room_List[3][5] = Room_List[3][4].north = Room("""
+You enter the room and are immediately assaulted... by the smell of dried meats
 """)
 
 Room_List[3][6] = Room_List[3][5].north = Room("""
+You enter a room filled with tables and benches. must be the mess
 """)
 
 Room_List[4][3] = Room_List[3][3].east = Room("""
+You enter what seems to be the servants quarters
 """)
 
 Room_List[5][3] = Room_List[4][3].east = Room("""
+You enter a room with cots and chests. The beds are made quite nicely.
 """)
 
 Room_List[6][3] = Room_List[5][3].east = Room("""
+You enter a room with what appears to practice dummies. Some of them look pretty roughed up. Poor bastards
 """)
 
 Room_List[6][4] = Room_List[6][3].north = Room("""
+You enter a room and regret it. Buckets in the corner ,and the burning of your nose hair, tell you it the lavatory
 """)
 
 Room_List[6][5] = Room_List[6][4].north = Room("""
+You enter a room lined with mold along the walls
 """)
 
 Room_List[6][6] = Room_List[6][5].north = Room("""
+You enter a room with a golden throne at its center. Must be the throne room
 """)
 
 Room_List[6][2] = Room_List[6][3].south = Room("""
+You enter a room with absolutely nothing in it
 """)
 
 Room_List[6][1] = Room_List[6][2].south = Room("""
+You enter a room adorned with magic symbols. 
 """)
 
-Room_List[6][0] = Room_List[6][1].south = Room(""" 
-door room
+Room_List[6][0] = Room_List[6][1].south = door_room = Room(""" 
+You enter a room with 16 square indents lining the wall. suddenly you hear 'Reveal what you have found and speak your
+answer'
 """)
 
 Room_List[2][3] = Room_List[3][3].west = Room("""
+You enter a room and find books upon books, to bad you don't know how to read.
 """)
 
 Room_List[1][3] = Room_List[2][3].west = Room("""
+you enter a room with gadgets and gizmos aplenty
 """)
 
 Room_List[0][3] = Room_List[1][3].west = Room("""
+You enter a room with chains upon the wall
 """)
 
 Room_List[0][4] = Room_List[0][3].north = Room("""
+You enter a room with kegs stacked three high. Come back later and lets party.
 """)
 
 Room_List[0][5] = Room_List[0][4].north = Room("""
+You enter a room with farming tools hanging on the wall, and bags of rotten grain at your feet
 """)
 
 Room_List[0][6] = Room_List[0][5].north = Room("""
+You enter a room and smell putrid flesh. You see the zombies bumping into walls. don't worry they can't hurt you... yet
 """)
 
 Room_List[0][2] = Room_List[0][3].south = Room("""
+You enter a room with a giant ring protruding from the wall.
 """)
 
 Room_List[0][1] = Room_List[0][2].south = Room("""
+You enter a room with all sorts of wares hanging from the wall. 
 """)
 
 Room_List[0][0] = Room_List[0][1].south = Room("""
+You enter the room and see a plump shop keep behind a counter. In an unusually high pitched voice he says 'welcome to 
+walls mart, get your crap and get out'
 """)
 
 
-
-Room_R1 = Room("""
-you head right and enter the servants quarters
-""")
-
-Room_3  = Room_R1.west = Room("""
-You are in a cranky wizard chambers.
-""")
-
-
-Room_L1 = Room_3.west = Room("""
-You are in a spacious tower.
-""")
 
 
 # letter_bank is an array of item letters.
@@ -171,8 +179,8 @@ def go(direction):
         current_room = room
         say('You go %s.' % direction)
         look()
-        if room == Room_L1: #magic_forest:
-            set_context('magic_aura')
+        if room == door_room: #magic_forest:
+            set_context('final_door')
         else:
             set_context('default')
     else:
