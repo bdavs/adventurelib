@@ -5,6 +5,7 @@
 - [ ] make ending of the game
 - [ ] add shop and mechanism to spend (in game) currency
 - [ ] make master record of all rooms and their contents
+- [ ] determine if testing or in streamlabs automagically
 
 ## Eventually
 - [ ] add ability to integrate into streamlabs currency

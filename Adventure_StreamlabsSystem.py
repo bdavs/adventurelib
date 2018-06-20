@@ -19,6 +19,8 @@ from Settings_Module import MySettings
 from story import *
 
 import adventurelib
+import mechanics
+
 #---------------------------
 #   [Required] Script Information
 #---------------------------
@@ -60,6 +62,7 @@ def Init():
     ScriptSettings = MySettings(SettingsFile)
     ScriptSettings.Response = "Overwritten pong! ^_^"
 
+    mechanics.testing()
 
     return
 
