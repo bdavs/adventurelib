@@ -14,7 +14,7 @@
     - [ ] Magic
 - [ ] make each player a unique version(?)
 - [ ] normal grammar (an apple vs a banana)
-
+- [ ] overlay map command
 
 ## example: Nested TODOs
 - [ ] Top level task
