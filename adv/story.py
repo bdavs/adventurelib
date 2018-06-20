@@ -10,25 +10,99 @@ Room.items = Bag()
 Room.gold = 0
 
 #locations
-current_room = starting_room = Room("""
+Width = 9
+Height = 7
+Room_List = []
+for x in range(0,Width):
+    Room_List.append([Room("") for y in range(0,Height)])
+
+
+current_room = starting_room = Room_List[3][0] = Room("""
 you awaken in a dungeon cellar. in front of you lies a notebook which reads, 
 Take me with you to find the letters. only one phrase will set you free
 """)
 
-Room_1 = starting_room.north = Room("""
+Room_List[3][1] = Room_List[3][0].north = Room("""
 you proceed toward the next room. this room is dimly lit and smells of mold.
 """)
 
-Room_2 = Room_1.north = Room("""
+Room_List[3][2] = Room_List[3][1].north = Room("""
 You press on through, coming to a room with a single candle and table.
 """)
+
+Room_List[3][3] = Room_List[3][2].north = Room("""
+""")
+
+Room_List[3][4] = Room_List[3][3].north = Room("""
+""")
+
+Room_List[3][5] = Room_List[3][4].north = Room("""
+""")
+
+Room_List[3][6] = Room_List[3][5].north = Room("""
+""")
+
+Room_List[4][3] = Room_List[3][3].east = Room("""
+""")
+
+Room_List[5][3] = Room_List[4][3].east = Room("""
+""")
+
+Room_List[6][3] = Room_List[5][3].east = Room("""
+""")
+
+Room_List[6][4] = Room_List[6][3].north = Room("""
+""")
+
+Room_List[6][5] = Room_List[6][4].north = Room("""
+""")
+
+Room_List[6][6] = Room_List[6][5].north = Room("""
+""")
+
+Room_List[6][2] = Room_List[6][3].south = Room("""
+""")
+
+Room_List[6][1] = Room_List[6][2].south = Room("""
+""")
+
+Room_List[6][0] = Room_List[6][1].south = Room("""
+""")
+
+Room_List[2][3] = Room_List[3][3].west = Room("""
+""")
+
+Room_List[1][3] = Room_List[2][3].west = Room("""
+""")
+
+Room_List[0][3] = Room_List[1][3].west = Room("""
+""")
+
+Room_List[0][4] = Room_List[0][3].north = Room("""
+""")
+
+Room_List[0][5] = Room_List[0][4].north = Room("""
+""")
+
+Room_List[0][6] = Room_List[0][5].north = Room("""
+""")
+
+Room_List[0][2] = Room_List[0][3].south = Room("""
+""")
+
+Room_List[0][1] = Room_List[0][2].south = Room("""
+""")
+
+Room_List[0][0] = Room_List[0][1].south = Room("""
+""")
+
 
 
 Room_R1 = Room("""
 you head right and enter the servants quarters
 """)
 
-Room_3 = Room_2.north =Room_R1.west = Room("""
+Room_3  = Room_R1.west = Room("""
 You are in a cranky wizard chambers.
 """)
 
@@ -38,7 +112,8 @@ You are in a spacious tower.
 """)
 
 
-# letter_bank is an array of item letters. they will be added to the notebook
+# letter_bank is an array of item letters.
+# they will be added to the notebook
 letter_bank = []
 for letter in "THANKS FOR PLAYING":
     letter_bank.append(Item(letter))
@@ -55,10 +130,10 @@ compass = Item('Compass')
 ball = Item('Crystal ball', 'ball')
 
 # location properties and items
-Room_1.items = Bag({compass})
-Room_1.gold = 5
+Room_List[3][1].items = Bag({compass})
+Room_List[3][1].gold = 5
 
-Room_R1.gold = 6
+Room_List[3][2 ].gold = 6
 
 #wizard_chamber.items = Bag({wand})
 
@@ -93,7 +168,7 @@ def go(direction):
         current_room = room
         say('You go %s.' % direction)
         look()
-        if room == magic_forest:
+        if room == Room_L1: #magic_forest:
             set_context('magic_aura')
         else:
             set_context('default')
