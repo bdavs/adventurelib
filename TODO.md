@@ -2,7 +2,7 @@
 - [x] create way to store gold
 - [x] create way to store letters in notebook
 - [ ] add each room from the map
-- [ ] make ending of the game
+- [x] make ending of the game
 - [ ] add shop and mechanism to spend (in game) currency
 - [ ] make master record of all rooms and their contents
 - [ ] determine if testing or in streamlabs automagically

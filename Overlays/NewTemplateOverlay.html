@@ -1,0 +1,53 @@
+//---------------------------------
+//  Variables
+//---------------------------------
+var socket = new WebSocket(API_Socket);
+
+//---------------------------------
+//  Open Event
+//---------------------------------
+socket.onopen = function()
+{
+	// Format your Authentication Information
+	var auth = {
+		author: "AnkhHeart",
+		website: "https://Streamlabs.com",
+		api_key: API_Key,
+		events: [
+			"EVENT_SUB",
+			"EVENT_GW_SUB",
+			"EVENT_FOLLOW",
+			"EVENT_HOST"
+		]
+	}
+	
+	//  Send your Data to the server
+	socket.send(JSON.stringify(auth));
+};
+
+//---------------------------------
+//  Error Event
+//---------------------------------
+socket.onerror = function(error)
+{
+	//  Something went terribly wrong... Respond?!
+	console.log("Error: " + error);
+}
+
+//---------------------------------
+//  Message Event
+//---------------------------------
+socket.onmessage = function (message) 
+{
+	//  You have received new data now process it
+	console.log(message.data);
+}
+
+//---------------------------------
+//  Close Event
+//---------------------------------
+socket.onclose = function () 
+{
+	//  Connection has been closed by you or the server
+	console.log("Connection Closed!");
+}   

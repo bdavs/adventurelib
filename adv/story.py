@@ -1,24 +1,26 @@
 from __future__ import (nested_scopes, generators, division, absolute_import,
-with_statement, print_function, unicode_literals)
+                        with_statement, print_function, unicode_literals)
 # import pickle
 
 # from adventurelib import *
-from adventurelib import Room, Item, say, when, Bag, start, set_context, get_context
+from adventurelib import Room, Item, say, when, Bag, start, set_context
+# , get_context
+import mechanics
 
 # initialize rooms
 Room.items = Bag()
 Room.gold = 0
 
-#locations
-Width = 9
+# locations
+Width = 7
 Height = 7
 Room_List = []
-for x in range(0,Width):
-    Room_List.append([Room("") for y in range(0,Height)])
+for x in range(0, Width):
+    Room_List.append([Room("") for y in range(0, Height)])
 
 
 current_room = starting_room = Room_List[3][0] = Room("""
-You awaken in a dungeon cellar. in front of you lies a notebook which reads, 
+You awaken in a dungeon cellar. in front of you lies a notebook which reads,
 Take me with you to find the letters. only one phrase will set you free
 """)
 
@@ -122,7 +124,6 @@ walls mart, get your crap and get out'
 
 
 
-
 # letter_bank is an array of item letters.
 # they will be added to the notebook
 letter_bank = []
@@ -144,11 +145,11 @@ ball = Item('Crystal ball', 'ball')
 Room_List[3][1].items = Bag({compass})
 Room_List[3][1].gold = 5
 
-Room_List[3][2 ].gold = 6
+Room_List[3][2].gold = 6
 
-#wizard_chamber.items = Bag({wand})
+# wizard_chamber.items = Bag({wand})
 
-#tower.items = Bag({ball, letter_bank[0]})
+# tower.items = Bag({ball, letter_bank[0]})
 
 
 # make the notebook to store letters
@@ -162,6 +163,7 @@ notebook = Notebook('Notebook', 'book', 'notes')
 inventory = Bag()
 inventory.gold = 0
 inventory.add(notebook)
+
 
 # action functions
 @when('north', direction='north')
@@ -179,7 +181,7 @@ def go(direction):
         current_room = room
         say('You go %s.' % direction)
         look()
-        if room == door_room: #magic_forest:
+        if room == door_room: 
             set_context('final_door')
         else:
             set_context('default')
@@ -194,7 +196,7 @@ def take(item):
     if obj:
         say('You pick up the %s.' % obj)
         if obj in letter_bank:
-    #        print("this is a letter")
+#           print("this is a letter")
             nb = inventory.find("notebook")
             if nb:
                 nb.letters_found.add(obj)
@@ -210,6 +212,7 @@ def take(item):
     else:
         say('There is no %s here.' % item)
 
+
 @when('use ITEM')
 def use(item):
     current_item = inventory.find(item)
@@ -223,7 +226,9 @@ def use(item):
             say(current_room.exit(dir))
     else:
         say("Oak's words echoed... There's a time and place for everything, but not now.")
-      #say("There is currently no use for {} here".format(current_item))
+# say("There is currently no use for {} here".format(current_item))
+
+
 # add ability to drop gold
 @when('drop THING')
 def drop(thing):
@@ -234,6 +239,7 @@ def drop(thing):
         say('You drop the %s.' % obj)
         current_room.items.add(obj)
 
+
 @when('l')
 @when('look')
 def look():
@@ -241,11 +247,12 @@ def look():
     if current_room.items:
         for i in current_room.items:
             if i.amount > 0:
-                say('There are {} {} here.'.format(i.amount,i))
+                say('There are {} {} here.'.format(i.amount, i))
             else:
                 say('A %s is here.' % i)
     if current_room.gold > 0:
         say("There is {} gold on the ground".format(current_room.gold))
+
 
 @when('i')
 @when('inv')
@@ -255,7 +262,7 @@ def show_inventory():
     say('You have: ')
     for thing in inventory:
         if thing.amount > 0:
-            say("{} {}".format(thing.amount,thing))
+            say("{} {}".format(thing.amount, thing))
             single = False
         else:
             if single:
@@ -273,27 +280,29 @@ def show_inventory():
         say("You have found the following letters: ")
         for letter in nb.letters_found:
             say(letter)
+
+
 @when('cast', context='magic_aura', magic=None)
 @when('cast MAGIC', context='magic_aura', magic=None)
 def cast(magic):
-    if magic == None:
+    if magic is None:
         say("Which magic you would like to spell?")
     else:
         say("You cast " + magic)
 
 
-#save and load not currently working
+# save and load not currently working
 # @when('save')
-#def save():
+# def save():
 #    data = {"current_room": current_room, "inventory": inventory}
 #    #pickle.dump(data, open("save.p", "wb"))
 #    say("Game saved. ")
 
 
 # @when('load')
-#def load():
+# def load():
 #   # data = pickle.load(open("save.p", "rb"))
-##    global current_room
+#     global current_room
 #    current_room = data["current_room"]
 #    global inventory
 #    inventory = data["inventory"]
@@ -302,6 +311,7 @@ def cast(magic):
 #    show_inventory()
 
 if __name__ == "__main__":
-#    look()
+    # look()
+    mechanics.testing()
     start()
 
