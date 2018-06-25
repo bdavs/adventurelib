@@ -1,29 +1,15 @@
-from __future__ import nested_scopes, generators, division, absolute_import, with_statement, print_function
-TESTING = True
-if TESTING:
-    from future.builtins import *
-from future.utils import python_2_unicode_compatible
-
+from __future__ import (nested_scopes, generators, division, absolute_import,
+                        with_statement, print_function)
 import sys
-import re
-import textwrap
 import random
 from copy import deepcopy
 import funcsigs
-def get_terminal_size(fallback=(80, 24)):
-    return fallback
+TESTING = True
+if TESTING:
+    from future.builtins import *
+# from future.utils import python_2_unicode_compatible
 
-__version__ = '1.2'
-__all__ = (
-    'when',
-    'start',
-    'Room',
-    'Item',
-    'Bag',
-    'say',
-    'set_context',
-    'get_context',
-)
+# import mechanics
 
 
 #: The current context.
@@ -468,7 +454,7 @@ def help():
     cmds = sorted(c.orig_pattern for c, _, _ in commands if c.is_active())
     cmds_str = 'Currently Available Adventure Commands: ' + ", ".join(cmds)
     output(cmds_str)
-    #for c in cmds:
+    # for c in cmds:
     #    print(c)
 
 
@@ -490,7 +476,8 @@ def _available_commands():
     )
     return available_commands
 
-@python_2_unicode_compatible
+
+# @python_2_unicode_compatible
 def _handle_command(cmd):
     """Handle a command typed by the user."""
     ws = cmd.lower().split()
@@ -504,12 +491,13 @@ def _handle_command(cmd):
             break
     else:
         no_command_matches(cmd)
-    #print(python_2_unicode_compatible_redo(cmd))
 
-def python_2_unicode_compatible_redo(msg):
-    return unicode(msg)
 
-@python_2_unicode_compatible
+# def python_2_unicode_compatible_redo(msg):
+    # return unicode(msg)
+
+
+# @python_2_unicode_compatible
 def start(help=True):
     """Run the game."""
 
@@ -521,13 +509,13 @@ def start(help=True):
         qmark.orig_pattern = '?'
         commands.insert(0, (Pattern('help'), help, {}))
         commands.insert(0, (qmark, help, {}))
-    #begin main while loop
+    # begin main while loop
     while True:
         try:
             cmd = input(prompt())
-            #print(cmd + " test")
+            # print(cmd + " test")
         except EOFError:
-            print(python_2_unicode_compatible_redo("end of file"))
+            print("end of file")
             say("something broke")
             break
 
@@ -535,24 +523,20 @@ def start(help=True):
             continue
 
         _handle_command(cmd)
+        # mechanics.Get_Room_List()
         print(get_output())
 
-def single_command(cmds):
-#    try:
-#        cmd = cmds #input(python_2_unicode_compatible_redo(prompt())).strip()
-#    except EOFError:
-#        print(python_2_unicode_compatible_redo("end of file"))
-#        say("something broke")
-#        return
 
+def single_command(cmds):
     if not cmds:
-        #look()
+        # look()
         return
 
     _handle_command(cmds)
     return
 
-@python_2_unicode_compatible
+
+# @python_2_unicode_compatible
 def say(msg):
     """Print a message.
 
@@ -563,19 +547,22 @@ def say(msg):
     separately.
 
     """
-    msg = str(msg).replace('\n',' ')
+    msg = str(msg).replace('\n', ' ')
 #    msg = re.sub(r'^[ \t]*(.*?)[ \t]*$', r'\1', msg, flags=re.M)
 #    width = get_terminal_size()[0]
 #    paragraphs = re.split(r'\n(?:[ \t]*\n)', msg)
 #    formatted = (textwrap.fill(p.strip(), width=width) for p in paragraphs)
+#    python_2_unicode_compatible_redo('\n\n'.join(formatted)))
+    output(msg)
 
-    output(msg) #python_2_unicode_compatible_redo('\n\n'.join(formatted)))
-    #sys.stdout.flush()
+
 OUTPUT_STR = ""
+
+
 def output(msg):
     global OUTPUT_STR
     OUTPUT_STR += msg + " "
-#n    print(msg)
+#    print(msg)
 
 
 def get_output():
@@ -583,6 +570,7 @@ def get_output():
     temp = OUTPUT_STR
     OUTPUT_STR = ""
     return temp
+
 
 commands = [
     (Pattern('quit'), sys.exit, {}),  # quit command is built-in

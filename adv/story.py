@@ -10,6 +10,7 @@ import mechanics
 # initialize rooms
 Room.items = Bag()
 Room.gold = 0
+Room.visited = 0
 
 # locations
 Width = 7
@@ -23,6 +24,7 @@ current_room = starting_room = Room_List[3][0] = Room("""
 You awaken in a dungeon cellar. in front of you lies a notebook which reads,
 Take me with you to find the letters. only one phrase will set you free
 """)
+starting_room.visited = 1
 
 Room_List[3][1] = Room_List[3][0].north = Room("""
 You enter a dimly lit room which smells of elderberries.
@@ -117,11 +119,10 @@ Room_List[0][1] = Room_List[0][2].south = Room("""
 You enter a room with all sorts of wares hanging from the wall. 
 """)
 
-Room_List[0][0] = Room_List[0][1].south = Room("""
-You enter the room and see a plump shop keep behind a counter. In an unusually high pitched voice he says 'welcome to 
-walls mart, get your crap and get out'
+Room_List[0][0] = Room_List[0][1].south = shop_room = Room("""
+You enter the room and see a plump shop keep behind a counter. In an unusually high pitched voice he says 'Welcome to 
+Walls Mart, get your crap and get out'
 """)
-
 
 
 # letter_bank is an array of item letters.
@@ -132,6 +133,7 @@ for letter in "THANKS FOR PLAYING":
 
 # item creation
 Item.amount = 0
+Item.cost = 0
 mallet = Item('rusty mallet', 'mallet')
 spoon = Item('greasy spoon', 'spoon')
 
@@ -140,13 +142,15 @@ wand = Item('wand')
 compass = Item('Compass')
 
 ball = Item('Crystal ball', 'ball')
-
+ball.cost = 3
 # location properties and items
 Room_List[3][1].items = Bag({compass})
 Room_List[3][1].gold = 5
 
 Room_List[3][2].gold = 6
 
+
+shop_room.items = Bag({ball})
 # wizard_chamber.items = Bag({wand})
 
 # tower.items = Bag({ball, letter_bank[0]})
@@ -179,10 +183,13 @@ def go(direction):
     room = current_room.exit(direction)
     if room:
         current_room = room
+        current_room.visited = 1
         say('You go %s.' % direction)
         look()
-        if room == door_room: 
+        if room == door_room:
             set_context('final_door')
+        elif room == shop_room:
+            set_context('shop')
         else:
             set_context('default')
     else:
@@ -219,7 +226,13 @@ def use(item):
     if not current_item:
         say("you do not have that item")
     elif current_item is compass:
-        say(current_room.exits())
+        exits = current_room.exits()
+        for x in exits:
+            say(x)
+            next_room = current_room.exit(x)
+            if next_room.visited == 0:
+                next_room.visited = 3
+#        say(current_room.exits())
     elif current_item is ball:
         for dir in current_room.exits():
             say(" You gaze into the crystal and picture yourself moving {}.:".format(dir))
