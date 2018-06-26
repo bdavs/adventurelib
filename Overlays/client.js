@@ -19,7 +19,7 @@ function draw() {
     	    for(county = 1; county < 8; county++){
 	            y = (height + padding)*county;
                 if(rooms[countx-1][county-1] == 1){  //visited room
-                    ctx.fillStyle = 'rgb(0,0,0)';
+                    ctx.fillStyle = 'rgb(200,200,200)';
                     ctx.fillRect(x, y, width, height);
 	            }
 	            else if(rooms[countx-1][county-1] == 2){  //current room
