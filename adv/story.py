@@ -124,11 +124,14 @@ You enter the room and see a plump shop keep behind a counter. In an unusually h
 Walls Mart, get your crap and get out'
 """)
 
+grue_room = starting_room.down = Room("""
+You are at the bottom of the ladder. It is pitch black. You have nothing to create light. You are likely to be eaten by a grue
+""")
 
 # letter_bank is an array of item letters.
 # they will be added to the notebook
 letter_bank = []
-for letter in "THANKS FOR PLAYING":
+for letter in "THANKSFORPLAYING":
     letter_bank.append(Item(letter))
 
 # item creation
@@ -144,14 +147,16 @@ map = Item('Map')
 
 ball = Item('Crystal ball', 'ball')
 ball.cost = 3
+
+
 # location properties and items
 Room_List[3][1].items = Bag({compass})
 Room_List[3][1].gold = 5
 
 Room_List[3][2].gold = 6
 
-
-shop_room.items = Bag({ball})
+shop_room.items = Bag({wand})
+shop_room.store_items = Bag({ball})
 # wizard_chamber.items = Bag({wand})
 
 # tower.items = Bag({ball, letter_bank[0]})
@@ -173,6 +178,7 @@ master_item_list = Bag({mallet,spoon,wand,compass,map,ball,notebook,})
 for letter in letter_bank:
     master_item_list.add(letter)
     
+set_context('starting_room')
     
 # action functions
 @when('north', direction='north')
@@ -183,6 +189,10 @@ for letter in letter_bank:
 @when('e', direction='east')
 @when('west', direction='west')
 @when('w', direction='west')
+@when('down', direction='down',context='starting_room')
+@when('d', direction='down',context='starting_room')
+@when('up', direction='up',context='grue_room')
+@when('u', direction='up',context='grue_room')
 def go(direction):
     global current_room
     room = current_room.exit(direction)
@@ -195,6 +205,10 @@ def go(direction):
             set_context('final_door')
         elif room == shop_room:
             set_context('shop')
+        elif room == starting_room:
+            set_context('starting_room')
+        elif room == grue_room:
+            set_context('grue_room')
         else:
             set_context('default')
     else:
@@ -218,11 +232,20 @@ def take(item):
         else:
             inventory.add(obj)
     elif item == 'gold':
-        inventory.gold += current_room.gold
-        say('You pick up the {} gold'.format(current_room.gold))
-        current_room.gold = 0
+        if current_room.gold > 0:
+            inventory.gold += current_room.gold
+            say('You pick up the {} gold'.format(current_room.gold))
+            current_room.gold = 0
+        else:
+            say("There is no gold on the ground here")
+    elif current_room == shop_room:
+        obj = current_room.store_items.find(item)
+        if obj:
+            say("You gunna pay for that {}, kid? It costs {} gold. ".format(obj, obj.cost))
+        else:
+            say('There is no {} on the ground.'.format(item))
     else:
-        say('There is no %s here.' % item)
+        say('There is no {} on the ground.'.format(item))
 
 
 @when('use ITEM')
@@ -240,7 +263,7 @@ def use(item):
 #        say(current_room.exits())
     elif current_item is ball:
         for dir in current_room.exits():
-            say(" You gaze into the crystal and picture yourself moving {}.:".format(dir))
+            say(" You gaze into the crystal and picture yourself moving {}: ".format(dir))
             say(current_room.exit(dir))
     else:
         say("Oak's words echoed... There's a time and place for everything, but not now.")
@@ -270,7 +293,9 @@ def look():
                 say('A %s is here.' % i)
     if current_room.gold > 0:
         say("There is {} gold on the ground".format(current_room.gold))
-
+    if current_room == shop_room:
+        for i in current_room.store_items:
+             say('The {} costs {}'.format(i, i.cost))
 
 @when('i')
 @when('inv')

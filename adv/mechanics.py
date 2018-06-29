@@ -18,7 +18,7 @@ def give(item):
         story.inventory.add(thisItem)
         adv.say("added {} to your bag".format(thisItem))
     else:
-        adv.say("sorry could not find that item")
+        adv.say("Sorry could not find that item")
 
 @when('say RESPONSE', context='final_door')
 @when('speak RESPONSE', context='final_door')
@@ -40,21 +40,33 @@ def answer(response):
 @when('buy THING', context='shop')
 def buy(thing):
     gold = story.inventory.gold
-    item = story.shop_room.items.find(thing)
+    item = story.shop_room.store_items.find(thing)
     if item:
         if item.cost <= gold:
-            adv.say("you buy the thing")
+            adv.say("You buy the {}. ".format(item))
             story.inventory.gold -= item.cost
             story.inventory.add(item)
-            story.shop_room.items.take(thing)
+            story.shop_room.store_items.take(item)
+            adv.say("You now have {} gold. ".format(gold))
         else:
-            adv.say("you can't afford the thing")
+            adv.say("You can't afford the {}. you have {} gold and it costs {} gold".format(item,gold,item.cost))
+    else:
+        adv.say("Sorry I don't have a {} in my shop".format(thing))
+
+        
+@when('sell THING', context='shop')
+@when('sell', context='shop', thing='')
+@when('rob THING', context='shop')
+@when('steal THING', context='shop')
+def sell(thing):
+    adv.say("I ain't no fool or a charity, kid. Go find your own way to make some money like the rest of us.")
 
 
+        
 def matrixTranspose(matrix):
     return [[row[i] for row in matrix] for i in range(len(matrix[0]))]
 
-
+room_status = {"current": 2, "visited": 1,"seen":3, "unseen": 0, "nonexistant":0 }
 def Get_Room_List():
     roomlist = []
     for x in story.Room_List:
@@ -62,28 +74,28 @@ def Get_Room_List():
         for y in reversed(x):
             if y.description:
                 if y == story.current_room:
-                    roomlist1.append(2)
-                elif y.visited == 1:
-                    roomlist1.append(1)
-                elif y.visited == 3:
-                    roomlist1.append(3)
+                    roomlist1.append(room_status["current"]) # current room
+                elif y.visited == room_status["visited"]:
+                    roomlist1.append(room_status["visited"]) # room visited
+                elif y.visited == room_status["seen"]:
+                    roomlist1.append(room_status["seen"]) # room seen
                 else:
-                    roomlist1.append(0)
+                    roomlist1.append(room_status["unseen"]) # room not seen
             else:
-                roomlist1.append(0)
+                roomlist1.append(room_status["nonexistant"]) # room nonexistant
         roomlist.append(roomlist1)
     ret = roomlist
 #    ret = matrixTranspose(roomlist)
 #    print(ret)
-    directory = os.path.dirname(__file__)
-    with open(directory+"/../Overlays/room_data.js", "w") as wf:
+    #directory = os.path.dirname(__file__)
+    #with open(directory+"/../Overlays/room_data.js", "w") as wf:
 #    with open("room_data.json", "w") as wf:
-        jsonStr = json.dumps(ret)
+    jsonStr = json.dumps(ret)
         # json.dump(ret, wf)
-        jsonStrF = "var rooms = "+jsonStr+";"
+    #    jsonStrF = "var rooms = "+jsonStr+";"
         # print(jsonStr)
-        wf.write(jsonStrF)
-        return(jsonStr)
+    #    wf.write(jsonStrF)
+    return(jsonStr)
 
 
 def Has_Map():

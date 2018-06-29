@@ -4,9 +4,14 @@ import sys
 import random
 from copy import deepcopy
 import funcsigs
-TESTING = False
-if TESTING:
+TESTING = True
+#if TESTING:
+try:
     from future.builtins import *
+except ImportError:
+    print("couldn't find that module, likely running as streamlabs script")
+    pass
+#    raise ImportWarning("can't find that module dawg")
 # from future.utils import python_2_unicode_compatible
 
 # import mechanics
@@ -178,7 +183,7 @@ class Room(object):
 
 Room.add_direction('north', 'south')
 Room.add_direction('east', 'west')
-
+Room.add_direction('up', 'down')
 
 class Item:
     """A generic item object that can be referred to by a number of names."""
@@ -571,7 +576,13 @@ def get_output():
     OUTPUT_STR = ""
     return temp
 
+help = globals()['help']
+qmark = Pattern('help')
+qmark.prefix = ['?']
+qmark.orig_pattern = '?'
 
 commands = [
     (Pattern('quit'), sys.exit, {}),  # quit command is built-in
 ]
+commands.insert(0, (Pattern('help'), help, {}))
+commands.insert(0, (qmark, help, {}))
