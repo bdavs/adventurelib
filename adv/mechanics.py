@@ -2,7 +2,7 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 
 import json
-
+import os
 # from adventurelib import Room, Item, say, when, Bag, start, single_command, prompt, get_output
 import adventurelib as adv
 from adventurelib import when
@@ -63,14 +63,15 @@ def Get_Room_List():
     ret = roomlist
 #    ret = matrixTranspose(roomlist)
 #    print(ret)
-    with open("../Overlays/room_data.js", "w") as wf:
+    directory = os.path.dirname(__file__)
+    with open(directory+"/../Overlays/room_data.js", "w") as wf:
 #    with open("room_data.json", "w") as wf:
         jsonStr = json.dumps(ret)
         # json.dump(ret, wf)
-        jsonStr = "var rooms = "+jsonStr+";"
+        jsonStrF = "var rooms = "+jsonStr+";"
         # print(jsonStr)
-        wf.write(jsonStr)
-    return(ret)
+        wf.write(jsonStrF)
+        return(jsonStr)
 
 
 def testing():

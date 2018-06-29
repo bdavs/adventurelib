@@ -1,7 +1,7 @@
 ﻿var settings = {
   "Command": "!adv",
   "Permission": "everyone",
-  "Info": "",
-  "Cooldown": 1,
+  "Info": "test",
+  "Cooldown": 1.0,
   "Response": "Pong!"
 };

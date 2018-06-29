@@ -37,20 +37,10 @@ global SettingsFile
 SettingsFile = ""
 global ScriptSettings
 ScriptSettings = MySettings()
-global current_context
-current_context = None
-global CONTEXT_SEP
-CONTEXT_SEP = '.'
-global PY2
-PY2 =True
-global TESTING
-TESTING=True
 #---------------------------
 #   [Required] Initialize Data (Only called on load)
 #---------------------------
 def Init():
-
-#    TESTING=True
 
     #   Create Settings Directory
     directory = os.path.join(os.path.dirname(__file__), "Settings")
@@ -67,6 +57,13 @@ def Init():
     return
 
 #---------------------------
+#   Update Overlay / Process overlay updates
+#---------------------------    
+def UpdateMap(data):
+#    console.log(data)
+    return	
+	
+#---------------------------
 #   [Required] Execute Data / Process messages
 #---------------------------
 def Execute(data):
@@ -75,7 +72,7 @@ def Execute(data):
 
     #   Check if the propper command is used, the command is not on cooldown and the user has permission to use the command
     if data.IsChatMessage() and data.GetParam(0).lower() == ScriptSettings.Command and not Parent.IsOnUserCooldown(ScriptName,ScriptSettings.Command,data.User) and Parent.HasPermission(data.User,ScriptSettings.Permission,ScriptSettings.Info):
-        Parent.BroadcastWsEvent("EVENT_MINE", "{'show':false}")
+
 
         cmd_cnt = data.GetParamCount()
         cmds = ""
@@ -83,8 +80,9 @@ def Execute(data):
             cmds += data.GetParam(x) + " "
         #cmd = data.GetParam()
         adventurelib.single_command(cmds)
+        rooms = mechanics.Get_Room_List()
         response = adventurelib.get_output()
-
+        Parent.BroadcastWsEvent("EVENT_MINE", rooms)        
         Parent.SendStreamMessage(response)    # Send your message to chat
         Parent.AddUserCooldown(ScriptName,ScriptSettings.Command,data.User,ScriptSettings.Cooldown)  # Put the command on cooldown
 

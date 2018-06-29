@@ -1,11 +1,15 @@
 <html>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-<script src="API_Key.js"></script>
+<script src="../API_Key.js"></script>
+<script src="client.js"></script>
 
 <body>
+  <canvas id="canvas" width="300" height="300"></canvas>
   <div id="app">
+<!---
     <p style="color:red;" v-html="my_event"></p>
     <p v-html="last_event"></p>
+--->
   </div>
 </body>
 
@@ -32,8 +36,8 @@
       this.socket.onopen = function () {
         // Format your Authentication Information
         var auth = {
-          author: 'YOUR_NAME',
-          website: 'YOUR_SITE',
+          author: 'bdavs',
+          website: 'ws://127.0.0.1:3337/streamlabs',
           api_key: API_Key,
           events: ['EVENT_MINE']
         };
@@ -56,13 +60,16 @@
       this.socket.onmessage = function (message) {
         var json = JSON.parse(message.data);
         if(json.event == 'EVENT_MINE') {
-          vm.my_event += `${message.data}<br>`;
+          draw(JSON.parse(json.data));
+          //vm.my_event += `${message.data}<br>`;
         } else {
-          vm.last_event += `${message.data}<br>`;
+          console.log('Other Event:');
+          //vm.last_event += `${message.data}<br>`;
         }
 
         //  You have received new data now process it
         console.log(message);
+        //console.log("MONKEYS!");
       };
 
       //---------------------------------
