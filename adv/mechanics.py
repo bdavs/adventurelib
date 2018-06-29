@@ -9,6 +9,17 @@ from adventurelib import when
 import story
 
 
+# this should be a testing function only
+@when('give ITEM')
+def give(item):
+    #if TESTING:
+    thisItem = story.master_item_list.find(item)
+    if thisItem:
+        story.inventory.add(thisItem)
+        adv.say("added {} to your bag".format(thisItem))
+    else:
+        adv.say("sorry could not find that item")
+
 @when('say RESPONSE', context='final_door')
 @when('speak RESPONSE', context='final_door')
 @when('answer RESPONSE', context='final_door')
@@ -35,6 +46,7 @@ def buy(thing):
             adv.say("you buy the thing")
             story.inventory.gold -= item.cost
             story.inventory.add(item)
+            story.shop_room.items.take(thing)
         else:
             adv.say("you can't afford the thing")
 
@@ -74,6 +86,11 @@ def Get_Room_List():
         return(jsonStr)
 
 
+def Has_Map():
+    haveMap = True if story.inventory.find("Map") else False
+    return(haveMap)
+    
+    
 def testing():
     nb = story.inventory.find("Notebook")
     for obj in story.letter_bank:

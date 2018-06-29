@@ -140,6 +140,7 @@ spoon = Item('greasy spoon', 'spoon')
 wand = Item('wand')
 
 compass = Item('Compass')
+map = Item('Map')
 
 ball = Item('Crystal ball', 'ball')
 ball.cost = 3
@@ -168,7 +169,11 @@ inventory = Bag()
 inventory.gold = 0
 inventory.add(notebook)
 
-
+master_item_list = Bag({mallet,spoon,wand,compass,map,ball,notebook,})
+for letter in letter_bank:
+    master_item_list.add(letter)
+    
+    
 # action functions
 @when('north', direction='north')
 @when('n', direction='north')

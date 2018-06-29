@@ -39,7 +39,7 @@
           author: 'bdavs',
           website: 'ws://127.0.0.1:3337/streamlabs',
           api_key: API_Key,
-          events: ['EVENT_MINE']
+          events: ['EVENT_MAP','EVENT_NO_MAP']
         };
 
         //  Send your Data to the server
@@ -59,9 +59,11 @@
       //---------------------------------
       this.socket.onmessage = function (message) {
         var json = JSON.parse(message.data);
-        if(json.event == 'EVENT_MINE') {
+        if(json.event == 'EVENT_MAP') {
           draw(JSON.parse(json.data));
           //vm.my_event += `${message.data}<br>`;
+        }else if(json.event == 'EVENT_NO_MAP'){
+            clearMap();
         } else {
           console.log('Other Event:');
           //vm.last_event += `${message.data}<br>`;

@@ -4,6 +4,8 @@ function draw(rooms) {
     var canvas = document.getElementById('canvas');
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
         var x = 5;
         var y = 5;
         var height = 25;
@@ -37,4 +39,11 @@ function draw(rooms) {
     }
 }
 
-
+function clearMap(){
+     var canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    
+}

@@ -78,12 +78,16 @@ def Execute(data):
         cmds = ""
         for x in range(1, cmd_cnt):
             cmds += data.GetParam(x) + " "
-        #cmd = data.GetParam()
+
         adventurelib.single_command(cmds)
-        rooms = mechanics.Get_Room_List()
         response = adventurelib.get_output()
-        Parent.BroadcastWsEvent("EVENT_MINE", rooms)        
         Parent.SendStreamMessage(response)    # Send your message to chat
+
+        if(mechanics.Has_Map()):
+            rooms = mechanics.Get_Room_List()
+            Parent.BroadcastWsEvent("EVENT_MAP", rooms) 
+        else:
+            Parent.BroadcastWsEvent("EVENT_NO_MAP","")         
         Parent.AddUserCooldown(ScriptName,ScriptSettings.Command,data.User,ScriptSettings.Cooldown)  # Put the command on cooldown
 
     
