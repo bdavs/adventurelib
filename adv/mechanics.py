@@ -12,13 +12,15 @@ import story
 # this should be a testing function only
 @when('give ITEM')
 def give(item):
-    #if TESTING:
-    thisItem = story.master_item_list.find(item)
-    if thisItem:
-        story.inventory.add(thisItem)
-        adv.say("added {} to your bag".format(thisItem))
+    if adv.TESTING:
+        thisItem = story.master_item_list.find(item)
+        if thisItem:
+            story.inventory.add(thisItem)
+            adv.say("added {} to your bag".format(thisItem))
+        else:
+            adv.say("Sorry could not find that item")
     else:
-        adv.say("Sorry could not find that item")
+        adv.say("sorry, that feature is not currently enabled")
 
 @when('say RESPONSE', context='final_door')
 @when('speak RESPONSE', context='final_door')
@@ -32,9 +34,9 @@ def answer(response):
         #    adv.say(letter)
     adv.say("You speak the words to the door and.... ")
     if response == "THANKS FOR PLAYING".lower():
-        adv.say("The door swings open! Thank you for playing!")
+        adv.say("The door swings open! You walk into the light with a satisfaction of completing your quest. Thank you for playing!")
     else:
-        adv.say("nothing happens")
+        adv.say("nothing happens :-( Try again.")
 
 
 @when('buy THING', context='shop')
@@ -49,9 +51,9 @@ def buy(thing):
             story.shop_room.store_items.take(item)
             adv.say("You now have {} gold. ".format(gold))
         else:
-            adv.say("You can't afford the {}. you have {} gold and it costs {} gold".format(item,gold,item.cost))
+            adv.say("You can't afford the {}. you have {} gold and it costs {} gold. ".format(item,gold,item.cost))
     else:
-        adv.say("Sorry I don't have a {} in my shop".format(thing))
+        adv.say("Sorry I don't have a {} in my shop. ".format(thing))
 
         
 @when('sell THING', context='shop')

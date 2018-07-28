@@ -137,26 +137,29 @@ for letter in "THANKSFORPLAYING":
 # item creation
 Item.amount = 0
 Item.cost = 0
-mallet = Item('rusty mallet', 'mallet')
-spoon = Item('greasy spoon', 'spoon')
+#mallet = Item('rusty mallet', 'mallet')
+#spoon = Item('greasy spoon', 'spoon')
 
-wand = Item('wand')
+wand = Item('Mysterious Wand', 'wand')
 
 compass = Item('Compass')
 map = Item('Map')
 
-ball = Item('Crystal ball', 'ball')
-ball.cost = 3
+ball = Item('Crystal ball', 'ball', 'crystal')
+ball.cost = 5
 
+#letters that will be in the shop
+letter_bank[2].cost = 2
+letter_bank[5].cost = 3
 
 # location properties and items
-Room_List[3][1].items = Bag({compass})
+Room_List[3][1].items = Bag({compass,letter_bank[0]})
 Room_List[3][1].gold = 5
 
 Room_List[3][2].gold = 6
 
 shop_room.items = Bag({wand})
-shop_room.store_items = Bag({ball})
+shop_room.store_items = Bag({ball, letter_bank[2], letter_bank[5]})
 # wizard_chamber.items = Bag({wand})
 
 # tower.items = Bag({ball, letter_bank[0]})
