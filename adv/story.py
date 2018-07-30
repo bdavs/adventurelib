@@ -21,8 +21,8 @@ for x in range(0, Width):
 
 
 current_room = starting_room = Room_List[3][0] = Room("""
-You awaken in a dungeon cellar. in front of you lies a notebook which reads,
-Take me with you to find the letters. only one phrase will set you free
+You awaken in a dungeon cellar. In your hands lies a notebook which reads,
+Take me with you to find the letters. Only one phrase will set you free.
 """)
 starting_room.visited = 1
 
@@ -43,15 +43,15 @@ You enter a room brimmed full of weapons and a sign that reads armory.
 """)
 
 Room_List[3][5] = Room_List[3][4].north = Room("""
-You enter the room and are immediately assaulted... by the smell of dried meats
+You enter the room and are immediately assaulted... by the smell of dried meats.
 """)
 
 Room_List[3][6] = Room_List[3][5].north = Room("""
-You enter a room filled with tables and benches. must be the mess
+You enter a room filled with tables and benches. must be the mess.
 """)
 
 Room_List[4][3] = Room_List[3][3].east = Room("""
-You enter what seems to be the servants quarters
+You enter what seems to be the servants quarters.
 """)
 
 Room_List[5][3] = Room_List[4][3].east = Room("""
@@ -59,23 +59,23 @@ You enter a room with cots and chests. The beds are made quite nicely.
 """)
 
 Room_List[6][3] = Room_List[5][3].east = Room("""
-You enter a room with what appears to practice dummies. Some of them look pretty roughed up. Poor bastards
+You enter a room with what appears to practice dummies. Some of them look pretty roughed up. Poor bastards.
 """)
 
 Room_List[6][4] = Room_List[6][3].north = Room("""
-You enter a room and regret it. Buckets in the corner ,and the burning of your nose hair, tell you it the lavatory
+You enter a room and regret it. Buckets in the corner ,and the burning of your nose hair, tell you it the lavatory.
 """)
 
 Room_List[6][5] = Room_List[6][4].north = Room("""
-You enter a room lined with mold along the walls
+You enter a room lined with mold along the walls.
 """)
 
 Room_List[6][6] = Room_List[6][5].north = Room("""
-You enter a room with a golden throne at its center. Must be the throne room
+You enter a room with a golden throne at its center. Must have been the throne room once upon a time.
 """)
 
 Room_List[6][2] = Room_List[6][3].south = Room("""
-You enter a room with absolutely nothing in it
+You enter a room with absolutely nothing in it.
 """)
 
 Room_List[6][1] = Room_List[6][2].south = Room("""
@@ -92,11 +92,11 @@ You enter a room and find books upon books, to bad you don't know how to read.
 """)
 
 Room_List[1][3] = Room_List[2][3].west = Room("""
-you enter a room with gadgets and gizmos aplenty
+You enter a room with gadgets and gizmos aplenty.
 """)
 
 Room_List[0][3] = Room_List[1][3].west = Room("""
-You enter a room with chains upon the wall
+You enter a room with chains upon the wall.
 """)
 
 Room_List[0][4] = Room_List[0][3].north = Room("""
@@ -104,11 +104,11 @@ You enter a room with kegs stacked three high. Come back later and lets party.
 """)
 
 Room_List[0][5] = Room_List[0][4].north = Room("""
-You enter a room with farming tools hanging on the wall, and bags of rotten grain at your feet
+You enter a room with farming tools hanging on the wall, and bags of rotten grain at your feet.
 """)
 
 Room_List[0][6] = Room_List[0][5].north = Room("""
-You enter a room and smell putrid flesh. You see the zombies bumping into walls. don't worry they can't hurt you... yet
+You enter a room and smell putrid flesh. You see the zombies bumping into walls. don't worry they can't hurt you... yet.
 """)
 
 Room_List[0][2] = Room_List[0][3].south = Room("""
@@ -116,7 +116,7 @@ You enter a room with a giant ring protruding from the wall.
 """)
 
 Room_List[0][1] = Room_List[0][2].south = Room("""
-You enter a room with all sorts of wares hanging from the wall. 
+You enter a room with all sorts of wares hanging from the wall. There is light streaming in from the door to the south.
 """)
 
 Room_List[0][0] = Room_List[0][1].south = shop_room = Room("""
@@ -125,7 +125,7 @@ Walls Mart, get your crap and get out'
 """)
 
 grue_room = starting_room.down = Room("""
-You are at the bottom of the ladder. It is pitch black. You have nothing to create light. You are likely to be eaten by a grue
+You are at the bottom of the ladder. It is pitch black. You have nothing to create light. You are likely to be eaten by a grue.
 """)
 
 # letter_bank is an array of item letters.
@@ -137,39 +137,47 @@ for letter in "THANKSFORPLAYING":
 # item creation
 Item.amount = 0
 Item.cost = 0
-#mallet = Item('rusty mallet', 'mallet')
-#spoon = Item('greasy spoon', 'spoon')
 
 wand = Item('Mysterious Wand', 'wand')
-
 compass = Item('Compass')
-map = Item('Map')
-
+map = Item('Ancient Map','Map')
 ball = Item('Crystal ball', 'ball', 'crystal')
 ball.cost = 5
 
 #letters that will be in the shop
-letter_bank[2].cost = 2
+letter_bank[2].cost = 4
 letter_bank[5].cost = 3
 
 # location properties and items
-Room_List[3][1].items = Bag({compass,letter_bank[0]})
+Room_List[3][1].items = Bag({compass,letter_bank[10]})
 Room_List[3][1].gold = 5
 
-Room_List[3][2].gold = 6
+Room_List[0][5].gold = 6
 
-shop_room.items = Bag({wand})
+Room_List[3][6].items = Bag({map})
+
+Room_List[6][6].gold = 4
+
+Room_List[3][3].items = Bag({letter_bank[15]})
+Room_List[4][3].items = Bag({letter_bank[4]})
+Room_List[5][3].items = Bag({letter_bank[6]})
+Room_List[6][3].items = Bag({letter_bank[12]})
+Room_List[6][1].items = Bag({letter_bank[7]})
+Room_List[6][4].items = Bag({letter_bank[9]})
+Room_List[6][6].items = Bag({letter_bank[0]})
+Room_List[3][5].items = Bag({letter_bank[8]})
+Room_List[2][3].items = Bag({letter_bank[13]})
+Room_List[0][3].items = Bag({letter_bank[14]})
+Room_List[0][5].items = Bag({letter_bank[11]})
+Room_List[0][6].items = Bag({letter_bank[3]})
+Room_List[0][2].items = Bag({letter_bank[1]})
+
+#shop_room.items = Bag({wand})
 shop_room.store_items = Bag({ball, letter_bank[2], letter_bank[5]})
-# wizard_chamber.items = Bag({wand})
-
-# tower.items = Bag({ball, letter_bank[0]})
-
 
 # make the notebook to store letters
 class Notebook(Item):
     letters_found = Bag()
-
-
 notebook = Notebook('Notebook', 'book', 'notes')
 
 # initialize the players inventory
@@ -177,12 +185,14 @@ inventory = Bag()
 inventory.gold = 0
 inventory.add(notebook)
 
-master_item_list = Bag({mallet,spoon,wand,compass,map,ball,notebook,})
+#set starting context
+set_context('starting_room')
+
+#create master list for testing purposes
+master_item_list = Bag({wand,compass,map,ball,notebook,})
 for letter in letter_bank:
     master_item_list.add(letter)
-    
-set_context('starting_room')
-    
+        
 # action functions
 @when('north', direction='north')
 @when('n', direction='north')
@@ -223,16 +233,16 @@ def go(direction):
 def take(item):
     obj = current_room.items.take(item)
     if obj:
-        say('You pick up the %s.' % obj)
         if obj in letter_bank:
-#           print("this is a letter")
             nb = inventory.find("notebook")
             if nb:
+                say('You record the %s in your notebook and wipe away the letter to avoid confusion' % obj)
                 nb.letters_found.add(obj)
             else:
-                say("But you do not have a way to record it, so you put it back down on the ground.")
+                say("You do not have a way to record it, so you just leave it there for now")
                 current_room.items.add(obj)
         else:
+            say('You pick up the %s.' % obj)
             inventory.add(obj)
     elif item == 'gold':
         if current_room.gold > 0:
@@ -295,37 +305,45 @@ def look():
             else:
                 say('A %s is here.' % i)
     if current_room.gold > 0:
-        say("There is {} gold on the ground".format(current_room.gold))
+        say("There is {} gold on the ground.".format(current_room.gold))
     if current_room == shop_room:
         for i in current_room.store_items:
-             say('The {} costs {}'.format(i, i.cost))
+             say('The {} costs {}.'.format(i, i.cost))
 
 @when('i')
 @when('inv')
 @when('inventory')
 def show_inventory():
     single = True
-    say('You have: ')
+    say('You have:')
     for thing in inventory:
         if thing.amount > 0:
             say("{} {}".format(thing.amount, thing))
             single = False
         else:
-            if single:
-                say(thing)
-                single = False
-            else:
-                say(", "+str(thing))
-    if inventory.gold > 0:
-        if not single:
-            say(",")
-        say("{} gold".format(inventory.gold))
-        single = False
+#            if len(inventory) > 1
+            say("{},".format(thing))
+            #if single:
+            #    say(thing)
+            #else:
+            #    say(thing)
+            single = False
+   # if inventory.gold > 0:
+#    if not single:
+#        say(",")
+    say("{} gold.".format(inventory.gold))
+    #single = False
+    
     nb = inventory.find("Notebook")
     if nb and nb.letters_found:
-        say("You have found the following letters: ")
+        say("You have found the following letters:")
+ #       single = True
         for letter in nb.letters_found:
-            say(letter)
+ #           if single:
+            say("{}".format(letter))
+            #    single  = False
+#            else:
+#                say(", {}".format(letter))
 
 
 @when('cast', context='magic_aura', magic=None)
@@ -358,6 +376,6 @@ def cast(magic):
 
 if __name__ == "__main__":
     # look()
-    mechanics.testing()
+#    mechanics.testing()
     start()
 

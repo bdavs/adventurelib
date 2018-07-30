@@ -16,11 +16,11 @@ def give(item):
         thisItem = story.master_item_list.find(item)
         if thisItem:
             story.inventory.add(thisItem)
-            adv.say("added {} to your bag".format(thisItem))
+            adv.say("Added {} to your bag".format(thisItem))
         else:
             adv.say("Sorry could not find that item")
     else:
-        adv.say("sorry, that feature is not currently enabled")
+        adv.say("Sorry, that feature is not currently enabled")
 
 @when('say RESPONSE', context='final_door')
 @when('speak RESPONSE', context='final_door')
@@ -40,6 +40,7 @@ def answer(response):
 
 
 @when('buy THING', context='shop')
+@when('purchase THING', context='shop')
 def buy(thing):
     gold = story.inventory.gold
     item = story.shop_room.store_items.find(thing)
@@ -47,9 +48,19 @@ def buy(thing):
         if item.cost <= gold:
             adv.say("You buy the {}. ".format(item))
             story.inventory.gold -= item.cost
-            story.inventory.add(item)
-            story.shop_room.store_items.take(item)
-            adv.say("You now have {} gold. ".format(gold))
+            story.shop_room.store_items.take(thing)
+            #adv.say("{}".format(story.letter_bank))
+            if item in story.letter_bank:
+                nb = story.inventory.find("notebook")
+                if nb:
+                    adv.say('You tape the %s in your notebook' % item)
+                    nb.letters_found.add(item)
+                else:
+                    adv.say("You do not have a way to record it, so you just drop it on the ground")
+                    story.current_room.items.add(item)
+            else:
+                story.inventory.add(item)
+            adv.say("You now have {} gold. ".format(story.inventory.gold))
         else:
             adv.say("You can't afford the {}. you have {} gold and it costs {} gold. ".format(item,gold,item.cost))
     else:

@@ -5,10 +5,11 @@ import random
 from copy import deepcopy
 import funcsigs
 TESTING = True
-#if TESTING:
+
 try:
     from future.builtins import *
 except ImportError:
+    TESTING = False #this may have unintended behaviour
     print("couldn't find that module, likely running as streamlabs script")
     pass
 #    raise ImportWarning("can't find that module dawg")
@@ -580,9 +581,8 @@ help = globals()['help']
 qmark = Pattern('help')
 qmark.prefix = ['?']
 qmark.orig_pattern = '?'
-
-commands = [
-    (Pattern('quit'), sys.exit, {}),  # quit command is built-in
-]
+commands = []
+if TESTING:
+    commands = [    (Pattern('quit'), sys.exit, {}), ]
 commands.insert(0, (Pattern('help'), help, {}))
 commands.insert(0, (qmark, help, {}))
